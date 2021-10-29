@@ -1,11 +1,35 @@
+// category-routes.js by Jack Loveday
+
 const router = require('express').Router();
 const { Category, Product } = require('../../models');
 
-// The `/api/categories` endpoint
-
+// Find All Categories and associated Products
 router.get('/', (req, res) => {
-  // find all categories
-  // be sure to include its associated Products
+  Category.findAll({
+    // Check for attributes id, and category name
+    attributes: ['id', 'category_name'],
+    include: [
+      {
+        // Make sure the categories have the following:
+        model: Product,
+        attributes: [
+          'id',
+          'product_name',
+          'price',
+          'stock',
+          'category_id'
+        ]
+      }
+    ]
+  })
+  // Save the Data as a JSON
+  .then(categoryData => res.json(categoryData))
+  // Catch any errors
+  .catch(err => {
+    // Console log and send json response
+    console.log(err);
+    res.status(500).json(err);
+  })
 });
 
 router.get('/:id', (req, res) => {
