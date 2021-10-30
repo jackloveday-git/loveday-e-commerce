@@ -1,3 +1,5 @@
+// Category Model by Jack Loveday
+
 const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/connection.js');
@@ -7,7 +9,7 @@ class Category extends Model { }
 // Define the Columns
 Category.init(
   {
-    
+
     // id value: int, no null, primary, auto inc
     id: {
       type: DataTypes.INTEGER,
