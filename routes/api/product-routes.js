@@ -181,8 +181,34 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// Delete a product
 router.delete('/:id', (req, res) => {
+  Product.destroy({
+    where: {
 
+      // Match id
+      id: req.params.id
+    }
+  })
+
+  // Check if its not null then delete
+    .then(deleteProdData => {
+      if (!deleteProdData) {
+        res.status(404).json({ 
+          message: `No category found with ID: ${req.params.id}.` 
+        });
+        return;
+      }
+
+      // Return deleted product as json
+      res.json(deleteProdData);
+    })
+
+    // Catch errors
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
