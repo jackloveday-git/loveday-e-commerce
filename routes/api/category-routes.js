@@ -8,7 +8,10 @@ router.get('/', (req, res) => {
   Category.findAll({
 
     // Check for attributes id, and category name
-    attributes: ['id', 'category_name'],
+    attributes: [
+      'id',
+      'category_name'
+    ],
     include: [
       {
         // Make sure the categories have the following:
@@ -78,7 +81,7 @@ router.get('/:id', (req, res) => {
 
     // Catch any errors
     .catch(err => {
-      
+
       // Console log and send json response
       console.log(err);
       res.status(500).json(err);
