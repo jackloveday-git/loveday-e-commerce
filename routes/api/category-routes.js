@@ -78,6 +78,7 @@ router.get('/:id', (req, res) => {
 
     // Catch any errors
     .catch(err => {
+      
       // Console log and send json response
       console.log(err);
       res.status(500).json(err);
@@ -101,10 +102,12 @@ router.post('/', (req, res) => {
 // Update a Category by id
 router.put('/:id', (req, res) => {
   Category.update(req.body, {
+
     // Make sure the given id exists
     where: req.params.id
   })
     .then(editData => {
+
       // Check to make sure data is there
       if (!editData) {
         res.status(404).json({
@@ -120,8 +123,32 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// Delete a category by id
 router.delete('/:id', (req, res) => {
-  // delete a category by its `id` value
+  Category.destroy({
+
+    // Make sure the given id exists
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(deleteData => {
+
+      // Check if data is there
+      if (!deleteData) {
+        res.status(404).json({
+          message: `No Category with this ID: ${req.params.id}`
+        });
+        return;
+      }
+      res.json(deleteData);
+    })
+
+    // Check for error
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
