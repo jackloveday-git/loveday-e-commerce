@@ -81,18 +81,43 @@ router.get('/:id', (req, res) => {
       // Console log and send json response
       console.log(err);
       res.status(500).json(err);
-    })
+    });
 });
 
 // Create a new Category
 router.post('/', (req, res) => {
   Category.create({
-    
+
+    // Set the Category name to the given name
+    category_name: req.body.category_name
   })
+    .then(newCategory => res.json(newCategory))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
+// Update a Category by id
 router.put('/:id', (req, res) => {
-  // update a category by its `id` value
+  Category.update(req.body, {
+    // Make sure the given id exists
+    where: req.params.id
+  })
+    .then(editData => {
+      // Check to make sure data is there
+      if (!editData) {
+        res.status(404).json({
+          message: `No Category with this ID: ${req.params.id}`
+        });
+        return;
+      }
+      res.json(editData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.delete('/:id', (req, res) => {
